@@ -1,0 +1,62 @@
+#!/bin/bash
+
+source ~/.bin/shell_style
+
+main()
+{
+    case "$1" in
+        up)
+            up
+            ;;
+        drop)
+            drop
+            ;;
+        *)
+            printf "Unknow command. Use 'up' or 'drop'. \n"
+            ;;
+    esac
+}
+
+up()
+{
+    echo -e "${Green}Mysql Docker image configuration${Color_Off}"
+
+    echo -e "${Yellow}container name: ${Color_Off}"
+    read container_name
+    tput cuu 2
+    tput ed
+
+    echo -e "${Yellow}external port: ${Color_Off}"
+    read port
+    tput cuu 2
+    tput ed
+
+    echo -e "${Yellow}root password: ${Color_Off}"
+    read root_password
+    tput cuu 2
+    tput ed
+
+    if docker run --name $container_name -e MYSQL_ROOT_PASSWORD=$root_password -d -p $port:3306 -v mysqlvolume:/var/www/database mysql; then
+        width=$(tput cols)
+        line=$(printf '%*s' "$width" '' | tr ' ' '=')
+        printf "${Green}%s${Color_Off}\n" "$line"
+        docker ps
+        printf "${Green}%s${Color_Off}\n" "$line"
+        
+        printf "%-20s: ${Yellow}%s${Color_Off}\n" "Connection link" "localhost:$port"
+        printf "%-20s: ${Yellow}%s${Color_Off}\n" "User" "root"
+        printf "%-20s: ${Yellow}%s${Color_Off}\n" "Password" "$root_password"
+        printf "%-20s: ${Yellow}%s${Color_Off}\n" "Volume path" "/var/www/database"    
+    else
+        echo -e "${Red}Failed to run the container. Please check the error above. ${Color_Off}"
+        exit 1
+    fi
+
+}
+
+drop()
+{
+    docker rm -v -f $(docker ps -qa)
+}
+
+main "$@"

@@ -3,15 +3,13 @@
 container()
 {
     source ~/bin/shell_style.sh
-
+    
     echo -e "${Green}Mysql Docker image configuration${Color_Off}"
-
-    if[-z]
 
     echo -e "${Yellow}container name: ${Color_Off}"
     read container_name
     tput cuu 2
-    tput ed
+    tput eds
 
     echo -e "${Yellow}external port: ${Color_Off}"
     read port
