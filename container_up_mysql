@@ -21,7 +21,7 @@ container()
     tput cuu 2
     tput ed
 
-    if docker run --name ${container_name} -e MYSQL_ROOT_PASSWORD=$root_password -d -p $port:3306 -v mysqlvolume:/var/www/database mysql; then
+    if docker run --name ${container_name} -e MYSQL_ROOT_PASSWORD=$root_password -d -p $port:3306 -v mysqlvolume:/var/www/database mysql:8.0; then
         echo -e "${Green}Container ${container_name} is running at${Color_Off}"
         printf "%-20s: ${Yellow}%s${Color_Off}\n" "Connection link" "localhost:${port}"
         printf "%-20s: ${Yellow}%s${Color_Off}\n" "User" "root"
